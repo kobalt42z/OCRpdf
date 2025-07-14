@@ -1,0 +1,10 @@
+### OCR PDF Test
+POST http://localhost:8000/ocr
+Content-Type: multipart/form-data
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="sample.pdf"
+Content-Type: application/pdf
+
+< ./sample.pdf
+--boundary--
