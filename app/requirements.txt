@@ -3,7 +3,5 @@ uvicorn
 pdf2image
 pytesseract
 Pillow
-
 python-multipart
-
 ocrmypdf
