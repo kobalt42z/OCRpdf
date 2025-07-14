@@ -1,10 +1,10 @@
 ### OCR PDF Test
 POST http://localhost:8000/ocr
-Content-Type: multipart/form-data
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
---boundary
+------WebKitFormBoundary7MA4YWxkTrZu0gW
 Content-Disposition: form-data; name="file"; filename="sample.pdf"
 Content-Type: application/pdf
 
 < ./sample.pdf
---boundary--
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
