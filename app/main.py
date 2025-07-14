@@ -43,8 +43,8 @@ async def ocr_pdf_overlay(file: UploadFile = File(...)):
         tmp_in_path = tmp_in.name
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_out:
         tmp_out_path = tmp_out.name
-    # Run OCRmyPDF to add a text layer
-    ocrmypdf.ocr(tmp_in_path, tmp_out_path, deskew=True)
+    # Run OCRmyPDF to add a text layer for Hebrew
+    ocrmypdf.ocr(tmp_in_path, tmp_out_path, deskew=True, lang="heb")
     with open(tmp_out_path, "rb") as f:
         pdf_bytes = f.read()
     os.remove(tmp_in_path)
