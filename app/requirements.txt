@@ -5,3 +5,5 @@ pytesseract
 Pillow
 
 python-multipart
+
+ocrmypdf

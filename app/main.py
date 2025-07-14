@@ -1,10 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 import tempfile
 import os
 from pdf2image import convert_from_path
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageDraw
+import ocrmypdf
 
 app = FastAPI()
 
@@ -34,3 +35,18 @@ async def ocr_pdf(file: UploadFile = File(...)):
         result.append({'page': page_num + 1, 'items': page_result})
     os.remove(tmp_path)
     return JSONResponse(content={'pages': result})
+
+@app.post("/ocr/pdf-overlay")
+async def ocr_pdf_overlay(file: UploadFile = File(...)):
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_in:
+        tmp_in.write(await file.read())
+        tmp_in_path = tmp_in.name
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_out:
+        tmp_out_path = tmp_out.name
+    # Run OCRmyPDF to add a text layer
+    ocrmypdf.ocr(tmp_in_path, tmp_out_path, deskew=True)
+    with open(tmp_out_path, "rb") as f:
+        pdf_bytes = f.read()
+    os.remove(tmp_in_path)
+    os.remove(tmp_out_path)
+    return StreamingResponse(iter([pdf_bytes]), media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=ocr_overlay.pdf"})
